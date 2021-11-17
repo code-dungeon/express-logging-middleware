@@ -337,10 +337,10 @@
   resolved "https://registry.yarnpkg.com/@code-dungeon/mocha-given/-/mocha-given-0.0.1.tgz#d07bed99a4631058c56fd24033cb71da7c3be739"
   integrity sha512-IAyfXpsKbtD4LuHUdQ1YeyPvskyiMqPpl5M/yvQtYi6uy2s4VjvMEsQf8cfxg3MltHGBHc3TuXLyxO8XW3LiRw==
 
-"@code-dungeon/toothpick@^0.0.4":
-  version "0.0.4"
-  resolved "https://registry.yarnpkg.com/@code-dungeon/toothpick/-/toothpick-0.0.4.tgz#abf435608c35444889b70de42be56d972a0e8acf"
-  integrity sha512-S8H1Y9ZEZP0O6R9UT3fym1dt30Hy/5HjY8crr+hy4TdYYcLPZeAxt98D+y8yac/cvYbRYxkl0wsytmBDOfB8Kg==
+"@code-dungeon/toothpick@^0.0.5":
+  version "0.0.5"
+  resolved "https://registry.yarnpkg.com/@code-dungeon/toothpick/-/toothpick-0.0.5.tgz#f5f1d7443c1741e447a4c85c67675e8040d780ee"
+  integrity sha512-9/LUlErRHhps7bb1cqcASLnIcuiLKIV7EUBlxYTIb/6Rgq9wtgOuldLsGcE2J2ymGhelKiJDsW1xBNpQImhO6w==
 
 "@code-dungeon/typescript-lint@^0.0.1":
   version "0.0.1"

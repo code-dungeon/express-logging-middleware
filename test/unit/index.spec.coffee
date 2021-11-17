@@ -1,4 +1,4 @@
 describe 'module', ->
   When -> @module = importModule('index')
-  Then -> @module.create.should.not.be.undefined
+  Then -> expect(@module.create).to.not.be.undefined
   And -> @module.create.should.be.a('function')

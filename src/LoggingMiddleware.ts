@@ -11,8 +11,9 @@ interface HttpProperties {
   response: Response;
   requestBody?: string;
   responseBody?: string;
-  statusCode?: number;
+  status?: number;
   duration?: number;
+  ttfb?: number;
 }
 
 function getPath(req: Request): string {
@@ -41,9 +42,9 @@ class MiddlewareZone {
   private entryLogger: Logger.Interface;
   private exitLogger: Logger.Interface;
   private start: number = now();
-  public name: string;
   private exitHandled: boolean = false;
   private chunks: Array<any>;
+  private timeToFirstByte: number;
 
   constructor(entryLogger: Logger.Interface, exitLogger: Logger.Interface, request: Request, response: Response) {
     this.response = response;
@@ -62,26 +63,38 @@ class MiddlewareZone {
   protected patchResponse(response: Response): void {
     const write: Function = response.write;
     const end: Function = response.end;
+    /* istanbul ignore else */
     if (Boolean(write)) {
       response.write = (...args: Array<any>): boolean => {
         this.addChunks(args);
-        return write.apply(response, args);
+        const result: boolean = write.apply(response, args);
+        this.setTimeToFirstByte();
+        return result;
       };
     }
 
     response.end = (...args: Array<any>): Response => {
       this.addChunks(args);
       end.apply(response, args);
+      this.setTimeToFirstByte();
       this.logExit();
       return response;
     };
   }
 
+  private setTimeToFirstByte(): void {
+    if (this.timeToFirstByte === undefined) {
+      this.timeToFirstByte = Math.round(now() - this.start);
+    }
+  }
+
   private addChunks(args: Array<any>): void {
     const chunk: any = args[0];
-    if (Boolean(chunk)) {
-      this.chunks.push(chunk);
+    if (Boolean(chunk) === false) {
+      return;
     }
+
+    this.chunks.push(chunk);
   }
 
   protected logEnter(): void {
@@ -100,8 +113,9 @@ class MiddlewareZone {
     const { http } = ctx;
     const { statusCode } = this.response;
 
-    http.statusCode = statusCode;
+    http.status = statusCode;
     http.duration = duration;
+    http.ttfb = this.timeToFirstByte;
 
     if (this.chunks.length > 0 && Buffer.isBuffer(this.chunks[0])) {
       http.responseBody = Buffer.concat(this.chunks).toString('utf8');
@@ -125,7 +139,7 @@ class MiddlewareZone {
  * @parem exitLogger If provided the completion of a route will only use this logger
  * @returns {RequestHandler}
  */
-export function create(logger: Logger.Interface, exitLogger?: Logger.Interface): RequestHandler {
+export function createMiddleware(logger: Logger.Interface, exitLogger?: Logger.Interface): RequestHandler {
   return ctx.$init((request: Request, response: Response, next: NextFunction): void => {
     addContextProperties(request, response);
     const spec: MiddlewareZone = new MiddlewareZone(logger, exitLogger, request, response);

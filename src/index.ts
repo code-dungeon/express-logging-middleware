@@ -1,1 +1,1 @@
-export { create } from './LoggingMiddleware';
+export { createMiddleware as create } from './LoggingMiddleware';
