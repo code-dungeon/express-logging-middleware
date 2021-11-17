@@ -1,0 +1,25 @@
+{
+  "compilerOptions": {
+    "declaration": true,
+    "experimentalDecorators": true,
+    "esModuleInterop": true,
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "noImplicitAny": true,
+    "outDir": "./dist",
+    "preserveConstEnums": true,
+    "removeComments": true,
+    "sourceMap": true,
+    "target": "ES2021"
+  },
+  "include": [
+    "typings/**/*",
+    "src/**/*"
+  ],
+  "exclude": [
+    "node_modules",
+    "test",
+    "dist",
+    "**/*.d.ts"
+  ]
+}
