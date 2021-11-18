@@ -5,7 +5,7 @@ const { create } = require('./dist');
 const bodyParser = require('body-parser');
 const compress = require('compression');
 const cors = require('cors');
-const hooks = require('async_hooks');
+// const hooks = require('async_hooks');
 
 const app = express();
 
@@ -27,11 +27,13 @@ app.use(cors({
 
 const port = 8080;
 const defaultFormats = [
+  Logger.Format.errors({ stack: true }),
   Logger.Format.context(() => {
     return ctx.cid;
   }, 'cid'),
   Logger.Format.json(),
-  Logger.Format.splat()
+  Logger.Format.splat(),
+  Logger.Format.prettyErrors({ stack: true })
 ]
 
 Logger.Config.formats = defaultFormats;
@@ -60,11 +62,7 @@ app.use(create(middlewareLogger));
 // app.use(LoggingMiddleware(entryLogger, exitLogger));
 
 function dostuff(cb) {
-
-  console.log('before nextTick', hooks.executionAsyncId())
   process.nextTick(function () {
-    console.log('after nextTick', hooks.executionAsyncId())
-    console.log(ctx);
     cb.apply(null);
   });
 }
@@ -75,6 +73,7 @@ app.get('/test', (request, response) => {
   } else {
     // response.json({ status: 'ok' });
     dostuff(function () {
+      logger.info({ m: 'something', error: new Error('test') });
       response.send('ok');
     })
   }
