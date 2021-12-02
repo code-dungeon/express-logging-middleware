@@ -110,7 +110,7 @@ class MiddlewareZone {
     const end: number = now();
 
     const duration: number = Math.round(end - this.start);
-    const { http } = ctx;
+    const { http = {} } = ctx;
     const { statusCode } = this.response;
 
     http.status = statusCode;
