@@ -117,6 +117,8 @@ class MiddlewareZone {
     http.duration = duration;
     http.ttfb = this.timeToFirstByte;
 
+    ctx.http = http;
+
     if (this.chunks.length > 0 && Buffer.isBuffer(this.chunks[0])) {
       http.responseBody = Buffer.concat(this.chunks).toString('utf8');
     }
