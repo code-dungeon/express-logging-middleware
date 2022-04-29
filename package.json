@@ -1,6 +1,6 @@
 {
   "name": "@code-dungeon/express-logging-middleware",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "An express logging middleware using a logger interface compatible with winston",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
@@ -20,7 +20,7 @@
     "prepare": "husky install .github/hooks"
   },
   "peerDependencies": {
-    "@code-dungeon/context-continuation": "^0.0.2",
+    "@code-dungeon/context-continuation": "^0.0.4",
     "winston": ">= 3.3.3"
   },
   "devDependencies": {

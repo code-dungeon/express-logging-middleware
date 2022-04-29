@@ -142,9 +142,13 @@ class MiddlewareZone {
  * @returns {RequestHandler}
  */
 export function createMiddleware(logger: Logger.Interface, exitLogger?: Logger.Interface): RequestHandler {
-  return ctx.$init((request: Request, response: Response, next: NextFunction): void => {
-    addContextProperties(request, response);
-    const spec: MiddlewareZone = new MiddlewareZone(logger, exitLogger, request, response);
-    next();
-  });
+  // The async id for the handler is always the same, to force a new flow
+  // so the request context is separate the work is done in process.nextTick
+  return function loggingMiddleware(request: Request, response: Response, next: NextFunction): void {
+    process.nextTick(ctx.$init(() => {
+      addContextProperties(request, response);
+      const spec: MiddlewareZone = new MiddlewareZone(logger, exitLogger, request, response);
+      next();
+    }));
+  };
 }
