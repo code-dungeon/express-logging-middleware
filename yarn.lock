@@ -327,10 +327,10 @@
     cz-customizable "^6.3.0"
     husky "^7.0.0"
 
-"@code-dungeon/context-continuation@^0.0.5":
-  version "0.0.5"
-  resolved "https://registry.yarnpkg.com/@code-dungeon/context-continuation/-/context-continuation-0.0.5.tgz#daf117d1f9f08f9f26f088f35389b378a0b8fde0"
-  integrity sha512-5+chwulCuzdjIFnGY8iznFCT+hQa/v1s/6ugXeJJie8nlrVflt7koFfy1ZPSFrxpHVnMrcZxdNASFamtTmXATQ==
+"@code-dungeon/context-continuation@^0.0.6":
+  version "0.0.6"
+  resolved "https://registry.yarnpkg.com/@code-dungeon/context-continuation/-/context-continuation-0.0.6.tgz#bff422c10942a79b0dbd0ff5df40fd4fe11c2fee"
+  integrity sha512-7hVrqsJxc/BgOnSilFj0MLx/VJxGQ9jyitOHxCoYgL9knoOWIpeQ25ujp3Y2NEXnECLRGLjhQH41QFuImM5pUg==
 
 "@code-dungeon/mocha-given@^0.0.1":
   version "0.0.1"
