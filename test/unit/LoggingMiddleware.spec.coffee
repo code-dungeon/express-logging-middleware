@@ -1,5 +1,5 @@
-{createMiddleware} = importModule('LoggingMiddleware')
-{ctx} = require('@code-dungeon/context-continuation')
+{ createMiddleware } = importModule('LoggingMiddleware')
+{ ctx } = require('@code-dungeon/context-continuation')
 
 describe 'LoggingMiddleware', ->
   Given ->
@@ -19,7 +19,7 @@ describe 'LoggingMiddleware', ->
     }
     @next = spy()
 
-  When -> 
+  When (done) ->
     @execute(@req, @res, @next)
     @res.write(@firstWriteData)
     @res.write(@secondWriteData)
@@ -95,15 +95,15 @@ describe 'LoggingMiddleware', ->
     describe 'entry and exit logger defined', ->
       Given -> @execute = createMiddleware(@entryLogger, @exitLogger)
 
-      describe 'success', ->  
+      describe 'success', ->
         Given -> @res.statusCode = 200
         Then -> @entryLogger.info.should.have.been.calledOnce
         And -> @entryLogger.info.should.have.been.calledWith({state:'enter'})
         And -> @exitLogger.info.should.have.been.calledOnce
         And -> @exitLogger.info.should.have.been.calledWith({state:'exit'})
         And -> @exitLogger.info.should.have.been.calledAfter(@entryLogger.info)
-      
-      describe 'failure', ->  
+
+      describe 'failure', ->
         Given -> @res.statusCode = 500
         Then -> @entryLogger.info.should.have.been.calledOnce
         And -> @entryLogger.info.should.have.been.calledWith({state:'enter'})
@@ -113,14 +113,14 @@ describe 'LoggingMiddleware', ->
 
     describe 'only entry logger is defined', ->
       Given -> @execute = createMiddleware(@entryLogger)
-    
-      describe 'success', ->  
+
+      describe 'success', ->
         Given -> @res.statusCode = 200
         Then -> @entryLogger.info.should.have.been.calledTwice
         And -> @entryLogger.info.firstCall.args.should.eql([{state: 'enter'}])
         And -> @entryLogger.info.secondCall.args.should.eql([{state: 'exit'}])
-      
-      describe 'failure', ->  
+
+      describe 'failure', ->
         Given -> @res.statusCode = 500
         Then -> @entryLogger.info.should.have.been.calledOnce
         And -> @entryLogger.info.should.have.been.calledWith({state:'enter'})
@@ -135,11 +135,11 @@ describe 'LoggingMiddleware', ->
   #       @res.write(null)
   #       @res.end(@buffer)
   #     Then -> @write.should.have.been.called
-    
+
   #   describe 'write not defined', ->
   #     Given -> @res.write = undefined
   #     Then -> @write.should.not.have.been.called
-        
+
   #   describe 'multiple end status', ->
   #     When ->
   #       @res.statusCode = 200

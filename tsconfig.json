@@ -9,7 +9,7 @@
     "outDir": "./dist",
     "preserveConstEnums": true,
     "removeComments": true,
-    "sourceMap": true,
+    "sourceMap": false,
     "target": "ES2021"
   },
   "include": [

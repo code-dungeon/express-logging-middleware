@@ -32,7 +32,6 @@ const defaultFormats = [
     return ctx.cid;
   }, 'cid'),
   Logger.Format.json(),
-  Logger.Format.splat(),
   Logger.Format.prettyErrors({ stack: true })
 ]
 
@@ -45,6 +44,7 @@ Logger.Config.formats = defaultFormats;
 const logger = Logger.create();
 logger.info('server:%s', 'start');
 logger.info({ server: 'start' });
+logger.info('test', 'something');
 
 const middlewareLogger = Logger.create({
   formats: [

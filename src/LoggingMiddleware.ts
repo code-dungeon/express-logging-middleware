@@ -1,9 +1,11 @@
 import { Logger } from '@code-dungeon/toothpick';
-import { ctx } from '@code-dungeon/context-continuation';
+import { ctx, bind, init } from '@code-dungeon/context-continuation';
 import { Request, Response, NextFunction, RequestHandler } from 'express';
-
 const { v4 } = require('uuid');
 const now: Function = require('performance-now');
+type EndCallback = ((cb?: () => void) => void) |
+  ((chunk: any, cb?: () => void) => void) |
+((chunk: any, encoding: BufferEncoding, cb?: () => void) => void);
 
 interface HttpProperties {
   path: string;
@@ -73,13 +75,12 @@ class MiddlewareZone {
       };
     }
 
-    response.end = (...args: Array<any>): Response => {
-      this.addChunks(args);
-      end.apply(response, args);
+    response.end = bind(function endWrapper(chunk: any, ...args: Array<any>): void {
+      this.addChunks(chunk);
+      end.call(response, chunk, ...args);
       this.setTimeToFirstByte();
       this.logExit();
-      return response;
-    };
+    }, this) as any;
   }
 
   private setTimeToFirstByte(): void {
@@ -144,11 +145,9 @@ class MiddlewareZone {
 export function createMiddleware(logger: Logger.Interface, exitLogger?: Logger.Interface): RequestHandler {
   // The async id for the handler is always the same, to force a new flow
   // so the request context is separate the work is done in process.nextTick
-  return function loggingMiddleware(request: Request, response: Response, next: NextFunction): void {
-    process.nextTick(ctx.$init(() => {
-      addContextProperties(request, response);
-      const spec: MiddlewareZone = new MiddlewareZone(logger, exitLogger, request, response);
-      next();
-    }));
-  };
+  return init(function loggingMiddleware(request: Request, response: Response, next: NextFunction): void {
+    addContextProperties(request, response);
+    const spec: MiddlewareZone = new MiddlewareZone(logger, exitLogger, request, response);
+    next();
+  });
 }
